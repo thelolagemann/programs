@@ -91,8 +91,8 @@ function allPrograms () {
 /**
  * Searches installed applications for provided program(s).
  * 
- * @param {string|Array} programName The program name to search for
- * @returns {object|boolean} Returns an object of program information or false
+ * @param {string|Array.<String>} programName The program name to search for
+ * @returns {object|array} Returns a singular object or array of objects
  */
 function getProgram (programName) {
   if (Array.isArray(programName)) {
