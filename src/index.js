@@ -80,29 +80,30 @@ function splitProgram (programName) {
 }
 
 /**
- * Returns a list of all installed programs.
- * 
- * @return {Array}
- */
-function allPrograms () {
-  return PROGRAMS;
-}
-
-/**
  * Searches installed applications for provided program(s).
  * 
- * @param {string|Array.<String>} programName The program name to search for
+ * @param {string|Array.<String>} programName The program name(s) to search for
  * @returns {object|array|undefined} Returns a singular object, array of objects, or undefined
  */
-function getProgram (programName) {
-  if (Array.isArray(programName)) {
-    return PROGRAMS.filter(program => programName.some(programSearch => programSearch == program.name) > 0);
-  } else if (programName instanceof String) {
-    return PROGRAMS.find(program => program.name === programName);
+function getPrograms (programName) {
+  if (platformSupported()) {
+    if (Array.isArray(programName)) {
+      let results = {};
+      programName.forEach(programSearch => {
+        results[programSearch] = PROGRAMS.find(program => program.name === programSearch);
+      });
+      return results;
+     // return PROGRAMS.filter(program => programName.some(programSearch => programSearch == program.name) > 0);
+    } else if (programName instanceof String) {
+      return PROGRAMS.find(program => program.name === programName);
+    } else if (programName == undefined) {
+      return PROGRAMS;
+    }
+  } else {
+    return `The ${os.platform()} platform isn't currently supported`;
   }
 }
 
 export default {
-  allPrograms,
-  getProgram
+  getPrograms
 };
