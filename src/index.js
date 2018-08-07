@@ -89,14 +89,17 @@ function allPrograms () {
 }
 
 /**
- * Searches installed applications for provided program.
+ * Searches installed applications for provided program(s).
  * 
- * @param {string} programName The program name to search for
+ * @param {string|Array} programName The program name to search for
  * @returns {object|boolean} Returns an object of program information or false
  */
 function getProgram (programName) {
-  let program = PROGRAMS.find(program => program.name === programName);
-  return program ? program : false;
+  if (Array.isArray(programName)) {
+    return PROGRAMS.filter(program => programName.some(programSearch => programSearch == program.name) > 0);
+  } else if (programName instanceof String) {
+    return PROGRAMS.find(program => program.name === programName);
+  }
 }
 
 export default {
