@@ -62,3 +62,7 @@ typings/
 
 # jshint
 .jshintrc
+
+# build testing
+dist/*
+!dist/programs.*
