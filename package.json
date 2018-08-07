@@ -1,0 +1,39 @@
+{
+  "name": "@thelolagemann/programs",
+  "version": "0.0.1",
+  "description": "check installed programs and versions",
+  "main": "dist/program.js",
+  "scripts": {
+    "start": "babel -s inline -d dist -w src",
+    "build": "babel -s inline src -o dist/programs.js",
+    "production": "BABEL_ENV=production babel src -o dist/programs.min.js",
+    "prepublish": "npm run production && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thelolagemann/programs.git"
+  },
+  "keywords": [
+    "program",
+    "application",
+    "cross-platform"
+  ],
+  "author": "Harry Bond <thegamerfromwaitforit@gmail.com> (https://ttvjj.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thelolagemann/programs/issues"
+  },
+  "homepage": "https://github.com/thelolagemann/programs#readme",
+  "dependencies": {
+    "text-encoding": "^0.6.4"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-core": "^6.18.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-object-entries": "^1.0.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-minify": "^0.4.3",
+    "mocha": "^3.2.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "presets": [
+    "es2015"
+  ],
+  "plugins": [
+    "add-module-exports",
+    "transform-object-entries"
+  ],
+  "env": {
+    "production": {
+      "presets": [
+        "minify"
+      ]
+    }
+  }
+}
