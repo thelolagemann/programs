@@ -1,5 +1,5 @@
 {
-  "name": "@thelolagemann/programs",
+  "name": "node-programs",
   "version": "0.0.1",
   "description": "check installed programs and versions",
   "main": "dist/program.js",
