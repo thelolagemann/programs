@@ -17,6 +17,10 @@ const COMMANDS = {
   linux: 'dpkg -l'
 };
 
+const ERRORS = {
+  UNSUPPORTED_PLATFORM: `The ${os.platform()} platform isn't currently supported`
+};
+
 /** @var {Array}
  *  Attempts to load installed applications at runtime. Will return empty array if 
  *  the platform isn't currently supported */
@@ -86,24 +90,39 @@ function splitProgram (programName) {
  * @returns {object|array|undefined} Returns a singular object, array of objects, or undefined
  */
 function getPrograms (programName) {
-  if (platformSupported()) {
-    if (Array.isArray(programName)) {
-      let results = {};
-      programName.forEach(programSearch => {
-        results[programSearch] = PROGRAMS.find(program => program.name === programSearch);
-      });
-      return results;
-     // return PROGRAMS.filter(program => programName.some(programSearch => programSearch == program.name) > 0);
-    } else if (programName instanceof String) {
-      return PROGRAMS.find(program => program.name === programName);
-    } else if (programName == undefined) {
-      return PROGRAMS;
-    }
-  } else {
-    return `The ${os.platform()} platform isn't currently supported`;
+  // Check platform supported
+  if (!platformSupported()) return ERRORS.UNSUPPORTED_PLATFORM;
+
+  // Determine what to find
+  if (Array.isArray(programName)) {
+    return PROGRAMS.filter(program => programName.some(programSearch => programSearch == program.name) > 0);
+  } else if (typeof programName === 'string') {
+    return PROGRAMS.find(program => program.name === programName);
+  } else if (programName == undefined) {
+    return PROGRAMS;
   }
 }
 
+/**
+ * Returns false if more than one program isn't installed.
+ * 
+ * @param {string|Array<string>} programs 
+ */
+function hasPrograms (programs) {
+  // Check platform supported
+  if (!platformSupported()) return ERRORS.UNSUPPORTED_PLATFORM;
+
+  if (Array.isArray(programs)) {
+    return programs.every(program => {
+      return PROGRAMS.some(p => p.name === program);
+    });
+  } else if (typeof programs === 'string') {
+    return PROGRAMS.some(p => p.name === programs);
+  }
+  return false;
+}
+
 export default {
-  getPrograms
+  getPrograms,
+  hasPrograms
 };
