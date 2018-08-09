@@ -1,6 +1,6 @@
 {
   "name": "node-programs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "check installed programs and versions",
   "main": "dist/program.js",
   "scripts": {
