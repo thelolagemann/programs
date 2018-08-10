@@ -23,3 +23,6 @@ console.log(getPrograms('zip')) // object or undefined
 console.log(getPrograms(['xterm', 'yelp'])) // array of objects
 ```
 
+## Notes
+- Currently only works on Linux distros with dpkg
+
