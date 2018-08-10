@@ -19,15 +19,18 @@ const ERRORS = {
   UNSUPPORTED_PLATFORM: `The ${os.platform()} platform isn't currently supported`
 };
 
+// Check if platform is supported
+if (!COMMANDS.hasOwnProperty(os.platform())) throw Error(ERRORS.UNSUPPORTED_PLATFORM);
+
 /** @var {Array}
  *  Attempts to load installed applications at runtime. Will return empty array if 
  *  the platform isn't currently supported */
-const PROGRAMS = platformSupported() ? execSync(`${COMMANDS[os.platform()]}`, {encoding: 'utf8'}).split('\n')
+const PROGRAMS = execSync(`${COMMANDS[os.platform()]}`, {encoding: 'utf8'}).split('\n')
   .map(program => {
     return splitProgram(program);
   }).filter(program => {
     return program.name !== undefined;
-  }) : [];
+  });
 
 /**
  * Splits the provided string on nth occurence of delimiter.
@@ -38,15 +41,6 @@ const PROGRAMS = platformSupported() ? execSync(`${COMMANDS[os.platform()]}`, {e
  */
 function splitAt (str, del, start) {
   return str.split(del).slice(start).join(" ");
-}
-
-/**
- * Returns true if the platform is supported.
- * 
- * @return {Boolean}
- */
-function platformSupported () {
-  return COMMANDS.hasOwnProperty(os.platform());
 }
 
 /**
@@ -65,8 +59,6 @@ function splitProgram (programName) {
         'name': programInfo[1],
         'version': programInfo[2]
       };
-    case 'win32':
-      break;
     default:
       break;
   }
@@ -78,33 +70,25 @@ function splitProgram (programName) {
  * @param {string|Array.<String>} programName The program name(s) to search for
  * @returns {object|array|undefined} Returns a singular object, array of objects, or undefined
  */
-function getPrograms (programName) {
-  // Check platform supported
-  if (!platformSupported()) return ERRORS.UNSUPPORTED_PLATFORM;
-
+function getPrograms (programs) {
   // Determine what to find
-  if (Array.isArray(programName)) {
-    return PROGRAMS.filter(program => programName.some(programSearch => programSearch == program.name) > 0);
-  } else if (typeof programName === 'string') {
-    return PROGRAMS.find(program => program.name === programName);
-  } else if (programName == undefined) {
-    return PROGRAMS;
+  if (Array.isArray(programs)) {
+    return PROGRAMS.filter(program => programs.some(programSearch => programSearch == program.name) > 0);
+  } else if (typeof programs === 'string') {
+    return PROGRAMS.find(program => program.name === programs);
   }
+  return PROGRAMS;
 }
 
 /**
  * Returns false if more than one program isn't installed.
  * 
- * @param {string|Array<string>} programs 
+ * @param {string|Array<string>} programs
+ * @returns {boolean}
  */
 function hasPrograms (programs) {
-  // Check platform supported
-  if (!platformSupported()) return ERRORS.UNSUPPORTED_PLATFORM;
-
   if (Array.isArray(programs)) {
-    return programs.every(program => {
-      return PROGRAMS.some(p => p.name === program);
-    });
+    return programs.every(p => PROGRAMS.some(p2 => p2.name === p));
   } else if (typeof programs === 'string') {
     return PROGRAMS.some(p => p.name === programs);
   }
