@@ -1,9 +1,5 @@
 import os from 'os';
 import { execSync } from 'child_process';
-import encoder from 'text-encoding';
-
-// Create global utf8 decoder
-var decoder = new encoder.TextDecoder("utf-8");
 
 /**
  * A module that fetches installed application info
@@ -17,6 +13,8 @@ const COMMANDS = {
   linux: 'dpkg -l'
 };
 
+/** @var {Object}
+ * Errors object */
 const ERRORS = {
   UNSUPPORTED_PLATFORM: `The ${os.platform()} platform isn't currently supported`
 };
@@ -24,7 +22,7 @@ const ERRORS = {
 /** @var {Array}
  *  Attempts to load installed applications at runtime. Will return empty array if 
  *  the platform isn't currently supported */
-const PROGRAMS = platformSupported() ? uintToStr(execSync(`${COMMANDS[os.platform()]}`)).split('\n')
+const PROGRAMS = platformSupported() ? execSync(`${COMMANDS[os.platform()]}`, {encoding: 'utf8'}).split('\n')
   .map(program => {
     return splitProgram(program);
   }).filter(program => {
@@ -40,15 +38,6 @@ const PROGRAMS = platformSupported() ? uintToStr(execSync(`${COMMANDS[os.platfor
  */
 function splitAt (str, del, start) {
   return str.split(del).slice(start).join(" ");
-}
-
-/**
- * Returns a string from a UIntArray8
- * 
- * @param {UIntArray8} uint 
- */
-function uintToStr (uint) {
-  return decoder.decode(uint);
 }
 
 /**
