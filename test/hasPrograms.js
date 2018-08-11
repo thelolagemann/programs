@@ -4,15 +4,16 @@ const expect = chai.expect;
 const programs = getPrograms()
 
 describe("Has programs", () => {
-  it ('Check if the program(s) is installed', () => {
-    let fakeProgram = hasPrograms('fake program');
-    let fakePrograms = hasPrograms(['fake program 1', 'fake program 2']);
-    let realProgram = hasPrograms(programs[0].name);
-    let realPrograms = hasPrograms([programs[0].name, programs[1].name]);
-
-    expect(fakeProgram).to.be.false;
-    expect(fakePrograms).to.be.false;
-    expect(realProgram).to.be.true;
-    expect(realPrograms).to.be.true;
-  })
+  it ('should return false', () => {
+    expect(hasPrograms('fake program')).to.be.false;
+  });
+  it ('should return true', () => {
+    expect(hasPrograms(programs[0].name)).to.be.true;
+  });
+  it ('should return false', () => {
+    expect(hasPrograms(['fake program', 'fake program 2'])).to.be.false;
+  });
+  it ('should return true', () => {
+    expect(hasPrograms([programs[0].name, programs[1].name])).to.be.true;
+  });
 });

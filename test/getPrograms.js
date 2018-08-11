@@ -5,17 +5,19 @@ const programs = getPrograms();
 
 chai.use(require('chai-things'));
 
-describe("Get Programs", () => {
-  it ('Get installed programs(s) information', () => {
-    let fakeProgram = getPrograms('a fake program');
-    let fakePrograms = getPrograms(['fake program 1', 'fake program 2']);
-    let realProgram = getPrograms(programs[0].name);
-    let realPrograms = getPrograms([programs[0].name, programs[1].name]);
+const programList = getPrograms();
 
-    expect(fakeProgram).to.be.undefined;
-    expect(realProgram).have.keys('desc', 'name', 'platform', 'version');
-    expect(fakePrograms).to.be.empty;
-    
-    realPrograms.every(i => expect(i).to.have.keys('desc', 'name', 'platform', 'version'));
+describe("Get Programs", () => {
+  it ('should return an array of installed programs', () => {
+    expect(programList[50]).have.keys('desc', 'name', 'platform', 'version');
+  });
+  it ('should return undefined', () => {
+    expect(getPrograms('a fake program')).to.be.undefined;
+  });
+  it ('should return an object containing program information', () => {
+    expect(getPrograms(programList[0].name)).have.keys('desc', 'name', 'platform', 'version');
+  });
+  it ('should return an array of programs', () => {
+    getPrograms([programList[0].name, programList[1].name]).every(i => expect(i).to.have.keys('desc', 'name', 'platform', 'version'));
   });
 });
